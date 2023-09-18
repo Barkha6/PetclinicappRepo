@@ -14,7 +14,7 @@ pipeline {
         
         stage("Git Checkout"){
             steps{
-                git branch: 'main', changelog: false, poll: false, url: 'https://git-codecommit.ap-south-1.amazonaws.com/v1/repos/Demo'
+                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/Barkha6/PetclinicappRepo.git'
             }
         }
         
