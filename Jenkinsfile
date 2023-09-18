@@ -1,5 +1,5 @@
 pipeline {
-    agent any 
+    agent any
     
     environment {
         SCANNER_HOME=tool 'sonarqube-server'
@@ -9,38 +9,8 @@ pipeline {
         cluster = "demo"
         service = "demo-svc"
     }
-    
-    stages{
-        
-        stage("Compile"){
-            steps{
-                sh "mvn clean compile"
-            }
-        }
-        
-         stage("Test Cases"){
-            steps{
-                sh "mvn test"
-            }
-        }
-        
-        stage("Sonarqube Analysis "){
-            steps{
-                withSonarQubeEnv('sonar-server') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Petclinic \
-                    -Dsonar.java.binaries=. \
-                    -Dsonar.projectKey=Petclinic '''
-    
-                }
-            }
-        }
-        
-         stage("Build"){
-            steps{
-                sh " mvn clean install"
-            }
-        }
-        
+
+    stages {
         stage('Build App Image') {
             steps {
                 script {
@@ -64,10 +34,11 @@ pipeline {
               }
             }
           }
-        
-        stage("Deploy To Tomcat"){
-            steps{
-                sh "cp  /var/lib/jenkins/workspace/CI-CD/target/petclinic.war /opt/apache-tomcat-9.0.65/webapps/ "
+        stage('Deploy to ECS') {
+            steps {
+                withAWS(credentials: 'awsecrdemo', region: 'ap-south-1') {
+                    sh 'aws ecs update-service --cluster ${cluster} --service ${service} --force-new-deployment'
+                }
             }
         }
     }
