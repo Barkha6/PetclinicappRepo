@@ -12,12 +12,6 @@ pipeline {
     
     stages{
         
-        stage("Git Checkout"){
-            steps{
-                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/Barkha6/PetclinicappRepo.git'
-            }
-        }
-        
         stage("Compile"){
             steps{
                 sh "mvn clean compile"
