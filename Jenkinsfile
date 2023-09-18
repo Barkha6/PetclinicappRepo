@@ -2,7 +2,6 @@ pipeline {
     agent any
     
     environment {
-        SCANNER_HOME=tool 'sonarqube-server'
         registryCredential = 'awsecrdemo'
         appRegistry = '485490367164.dkr.ecr.ap-south-1.amazonaws.com/demo'
         awsRegistry = "https://485490367164.dkr.ecr.ap-south-1.amazonaws.com"
